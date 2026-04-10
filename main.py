@@ -1105,11 +1105,11 @@ async def run_app():
     # Token ve Port temizliği
     CLEAN_TOKEN = TOKEN.strip() if TOKEN else None
     if not CLEAN_TOKEN:
-        print("❌ HATA: DISCORD_TOKEN bulunamadı! .env dosyasını kontrol edin.")
-        return
+        print("❌ HATA: DISCORD_TOKEN bulunamadı! Lütfen deployment (Render vb.) panelinden Environment Variables kısmına DISCORD_TOKEN ekleyin.")
+        sys.exit(1)
 
-    # host="127.0.0.1" Selector loop ile Windows'ta daha uyumludur
-    config = uvicorn.Config(app, host="127.0.0.1", port=PORT, log_level="info", loop="asyncio")
+    # 0.0.0.0 allows external connections (Render, Heroku vb. platformlarda çalışması için 0.0.0.0 olmalıdır)
+    config = uvicorn.Config(app, host="0.0.0.0", port=PORT, log_level="info", loop="asyncio")
     server = uvicorn.Server(config)
     
     # Run both concurrently
